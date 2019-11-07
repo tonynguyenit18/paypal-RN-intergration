@@ -8,12 +8,25 @@ import {
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import axios from "axios";
-import qs from "qs"
+import qs from "qs";
+import { decode, encode } from 'base-64'
 
 const App = () => {
   const [isWebViewLoading, SetIsWebViewLoading] = useState(false);
   const [paypalUrl, setPaypalUrl] = useState('');
   const [accessToken, setAccessToken] = useState("");
+
+  //Fix bug btoa
+  useEffect(() => {
+    if (!global.btoa) {
+      global.btoa = encode;
+    }
+
+    if (!global.atob) {
+      global.atob = decode;
+    }
+  }, [])
+
 
   //When loading paypal page it refirects lots of times. This prop to control start loading only first time
   const [shouldShowWebViewLoading, setShouldShowWebviewLoading] = useState(true)
